@@ -2,6 +2,7 @@ import os
 import pandas as pd
 # TODO Define file pathc -> Import from path config file
 
+mapping_dikigoron_excel_file = os.path.join('..', 'Data', 'Mappings', 'ΛΙΣΤΑ ΔΙΚΗΓΟΡΩΝ ΕΝΟΡΚΩΝ.xlsx')
 
 def read_lawyer_excel(mapping_dikigoron_excel_file):
     return pd.read_excel(mapping_dikigoron_excel_file)
