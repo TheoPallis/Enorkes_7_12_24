@@ -1,0 +1,45 @@
+# Extra code
+    
+# def get_file_list_tuples(mapping_files, list_ofeileton):
+#     """Return a list of tuples of folder names and their associated files."""
+#     return [
+#         (folder_name, mapping_files.get(folder_name, "-"))
+#         for folder_name in list_ofeileton
+#     ]
+# file_list_tuples = get_file_list_tuples(mapping_files, list_ofeileton)
+# mapping_folders = {name: [] for name in list_ofeileton}
+
+# mapping_files = {name: [] for name in list_ofeileton}
+
+
+# # Check
+
+
+# multiple_files_df = pd.DataFrame(file_list_tuples, columns=['Folder_Name', 'Files'])
+# Split the 'Files' column into separate columns
+# files_expanded = multiple_files_df['Files'].apply(pd.Series)
+# Rename the new columns
+# files_expanded = files_expanded.rename(columns=lambda x: f'File_{x+1}')
+# Drop the original 'Files' column and concat the expanded columns to the original dataframe
+# multiple_files_df = pd.concat([multiple_files_df.drop('Files', axis=1), files_expanded], axis=1)
+# multiple_files_df[~multiple_files_df['File_2'].isna()]
+# multiple_files_df
+
+
+# DEBUGGING CODE -> get all the found word files
+# for k,v in mapping_files.items() :
+#      print(f"{k} : {os.path.basename(v)}")
+# RESULTS =  Path(r"C:\Users\pallist\Desktop\ΤΡΕΧΟΝΤΑ\Testing Folder\Results")  
+# current_date = f"{input()}"
+# anathesi_df = anathesi_df[anathesi_df['Ημερομηνία Προγραμματισμού  Ένορκης'] == current_date]
+# try :
+#     anathesi_df['Date_Katathesi']= np.where(anathesi_df['Διαδικασία'] == 'Μικροδιαφορές', "???", anathesi_df[date_katathesi_options[0]])
+# except :
+#     anathesi_df['Date_Katathesi']= np.where(anathesi_df['Διαδικασία'] == 'Μικροδιαφορές', "???", anathesi_df[date_katathesi_options[1]])
+
+
+# anathesi_df['Date_Katathesi']= pd.to_datetime(anathesi_df['Date_Katathesi'], errors='coerce')
+# anathesi_df['Date_Katathesi'] = anathesi_df['Date_Katathesi'].dt.strftime('%d/%m/%Y')
+# # anathesi_df = anathesi_df[anathesi_df['Ημερομηνία Προγραμματισμού  Ένορκης'] == "01/09/2023"]
+# anathesi_df['Κατάθεση μικροδ ΝΚΠολ Δ']
+# arxeio_anathesi = r"C:\Users\pallist\Desktop\3_1_24 taktiki.xlsx"

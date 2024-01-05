@@ -1,0 +1,7 @@
+# Notes
+
+# Some folders are not found because the name is different from the anathesi file (if I remove this condition it will take forever to load, because the condition limits the folders to be processed)
+# Fixed ΣΧΕΔΙΟ ΑΝΑΘΕΣΗΣ ΔΕΔΔΗΕ
+# df.to_csv('mydf.txt', sep='\t')
+# All files are found until
+# It does not get \\lawoffice\Applications\ScanDocs\ΔΕΔΔΗΕ scandocs\Υποθέσεις 107ης ανάθεσης\Κ\ΘΕΟΔΩΡΟΥ ΣΠΥΡΙΔΩΝ\Αρχείο
