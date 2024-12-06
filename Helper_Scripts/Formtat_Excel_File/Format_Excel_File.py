@@ -1,3 +1,5 @@
+import openpyxl
+from  openpyxl.styles import Font, Color, PatternFill 
 
 def format_df(file) :
     workbook = openpyxl.load_workbook(file)
@@ -10,4 +12,4 @@ def format_df(file) :
         for column in worksheet.columns:
             worksheet.column_dimensions[openpyxl.utils.get_column_letter(column[0].column)].width = 30      
     workbook.save(file)
-format_df('Βάση_auto.xlsx')
+# format_df(file)
