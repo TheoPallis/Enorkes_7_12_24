@@ -33,18 +33,21 @@ def main_function(excel_file_path,filtered_date=None,filtered_name_list=None,hea
     list_ofeileton,mapping_anatheseis,mapping_kodikoi =  generate_mappings_for_folder_search(anathesi_df)
     number_anathesis = get_number_anathesis(anathesi_df)
     number_anathesis = format_anathesis_phrase(number_anathesis)
-    
-    mapping_folders, mapping_files = get_all_folders(
+    path_df = create_path_df(anathesi_df)
+        
+    mapping_folders, mapping_files, mapping_kodikoi= get_all_folders(
     dedie_path,
     list_ofeileton,
+    path_df,
     out_path,
     mapping_anatheseis,
     mapping_kodikoi,
     number_anathesis
 )
+    print("Mapping files:", mapping_files)
+    print("Mapping folders:", mapping_folders)
     unnested_list = list(chain.from_iterable(list(mapping_folders.values())))
     # Create the ΕΝΟΡΚΕΣ sheet    
-    df1 = create_path_df(anathesi_df,unnested_list)
     # Create the ΑΝΑΦΟΡΑ sheet
     df2 = create_anafora_df(anathesi_df)
 
@@ -54,14 +57,15 @@ def main_function(excel_file_path,filtered_date=None,filtered_name_list=None,hea
 
     # Extract text and create kliseis_df
     antidikos_1, antidikos_2, antidikos_3, last_date,sxetika1, sxetika2, sxetika3, sxetika4, sxetika5, sxetika6,sxetika7, sxetika8,sxetika9,sxetika10,sxetika11,sxetika12,sxetika13,sxetika14,sxetika15  = get_text_and_date(file_list, dedie_path)  #  sxetika9, sxetika10        
+    print("Names :",antidikos_1)
     # Create kliseis df
     #temp
     anathesi_df['hours'] = 0
     hours_col = anathesi_df['hours']
       
     df3 = create_kliseis_df(anathesi_df,antidikos_1,antidikos_2,antidikos_3,last_date,hours_col,'Ονοματεπώνυμο_Δικηγόρου','Ημερομηνία Προγραμματισμού  Ένορκης', sxetika1, sxetika2, sxetika3, sxetika4, sxetika5, sxetika6, sxetika7, sxetika8, sxetika9, sxetika10,sxetika11, sxetika12, sxetika13, sxetika14, sxetika15)
-    create_excel_file(df1,df2,df3)
-    return mapping_files,df3
+    create_excel_file(path_df,df2,df3)
+    return mapping_files,df3,mapping_folders
 
 def test_main_function() :
     test_excel_file_path = r"C:\Users\pallist\Desktop\Desktop\ΤΡΕΧΟΝΤΑ\Ένορκες\90 12_12.xlsx"

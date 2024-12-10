@@ -87,8 +87,6 @@ def get_text_and_date(file_list, path_to_search_enorkes):
     sxetika_pattern = r"(?<=ήτοι\s:\s)([\s\S]*?)(?=ΓΙΑ\sΤΟΥΣ\sΛΟΓΟΥΣ\sΑΥΤΟΥΣ)"
     sxetika_lists = [sxetika1, sxetika2, sxetika3, sxetika4, sxetika5, sxetika6, sxetika7, sxetika8, sxetika9, sxetika10,sxetika11,sxetika12,sxetika13,sxetika14,sxetika15]
 
-
-    # for file in file_list:
     for file in file_list:
         try:
             # print(file)
@@ -99,7 +97,6 @@ def get_text_and_date(file_list, path_to_search_enorkes):
                 paragraphs = ''.join(p.text for p in doc.paragraphs)
             except Exception as e:
                 # print(f"Exception1 opening document {file}: {e}")
-                # append_empty(antidikos_1, antidikos_2, antidikos_3, last_date, sxetika1, sxetika2, sxetika3, sxetika4, sxetika5, sxetika6, sxetika7, sxetika8, sxetika9)
                 raise  # Re-raises the exception to skip to the outer except block
 
             # Step 2: Extract dates
