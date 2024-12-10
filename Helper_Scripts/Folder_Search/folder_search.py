@@ -54,7 +54,7 @@ def get_all_folders(dedie_path, list_ofeileton, df1, out_path, mapping_anathesei
                 number = match.group()[:-2]
 
                 for name in list_ofeileton:
-                    print("         Processing name:", name)
+                    # print("         Processing name:", name)
                     if mapping_anatheseis[name] != number:
                         continue
                     first_word_folder = os.path.basename(root).split()[0]
@@ -63,7 +63,7 @@ def get_all_folders(dedie_path, list_ofeileton, df1, out_path, mapping_anathesei
                             full_name  = name.split(' ')[:2]
                             full_name = ' '.join(full_name)
                             count_full_name_occurrences = (sum(len(re.findall(full_name, item)) for item in folder_names))
-                            print("Full Name:", full_name)
+                            # print("Full Name:", full_name)
                             if count_full_name_occurrences > 1:
                                  for kodikos in mapping_kodikoi[name]:
                                       if kodikos in file :
@@ -80,7 +80,7 @@ def get_all_folders(dedie_path, list_ofeileton, df1, out_path, mapping_anathesei
                             
                             elif  len(mapping_kodikoi) == 1:
                                 if mapping_kodikoi[name][0] in file :
-                                    print("             Found matching folder for:", name," with a single occurrence")
+                                    # print("             Found matching folder for:", name," with a single occurrence")
                                     mapping_folders[name] = root
                                     for file in files:
                                         if file.endswith(".docx") and file_filter(file, first_word_folder):
@@ -92,7 +92,7 @@ def get_all_folders(dedie_path, list_ofeileton, df1, out_path, mapping_anathesei
                                     continue  # No need to check further if folder already found
                                                         
                             else :
-                                    print("             No matching folder found for:", name, " with zero occurrences")
+                                    # print("             No matching folder found for:", name, " with zero occurrences")
                                     continue
     df1['Φάκελος'] = df1['Αντίδικος'].map(mapping_folders)
 

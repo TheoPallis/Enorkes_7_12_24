@@ -32,14 +32,14 @@ def extract_sxetika(sxetika_found):
         return None
 
     # Adjusted regex to split on all occurrences of "(Σχετικό X)" with optional spaces or additional characters
-    matches = re.split(r'\(Σχετικό (\d+[α]?(?:\s*και\s*\d+[α]?)?)\)', sxetika_found[0])
+    matches = re.split(r'\(Σχετικ[όά] (\d+[α]?(?:\s*και\s*\d+[α]?)?)\)', sxetika_found[0])
     formatted_list = []
 
     # Iterate through the matches to generate the final formatted output
     for i in range(1, len(matches), 2):
         order = matches[i].strip()
         content = matches[i - 1].strip().replace(".", "")
-        
+        print(i+1,": ",content)
         # Check if there are multiple references (e.g., "5 και 5α")
         if "και" in order:
         # Split the order by "και" and process each part separately
@@ -51,7 +51,7 @@ def extract_sxetika(sxetika_found):
                     formatted_list.append(formatted_item)
                 elif len(formatted_item) >= 250:
                     formatted_item = f"Έγγραφο {ref} : {content} (Σχετικό {ref})"  
-                    formatted_item = formatted_item[:200] + f"!!Αδύνατη η αναγραφή λόγω μεγάλου μήκους" 
+                    formatted_item = formatted_item[:200] + f" !!Αδύνατη η αναγραφή λόγω μεγάλου μήκους" 
                     formatted_list.append(formatted_item)
         else:
             # if any(phrase in content for phrase in ["Διάγραμμα κύριου τιμολογίου", "Ένορκη βεβαίωση μάρτυρα", "Το τυποποιημένο φύλλο υπολογισμού", "Αντίγραφο της παρούσας αγωγής"]):
@@ -64,7 +64,7 @@ def extract_sxetika(sxetika_found):
                     formatted_list.append(formatted_item)
                 elif len(content) >= 250:
                     formatted_item = f"Έγγραφο {order} : {content}"
-                    formatted_item = formatted_item[:200] + f"!!Αδύνατη η αναγραφή λόγω μεγάλου μήκους" 
+                    formatted_item = formatted_item[:200] + f" !!Αδύνατη η αναγραφή λόγω μεγάλου μήκους" 
                     formatted_list.append(formatted_item)
 
     # Join the formatted items into a single string with line breaks
