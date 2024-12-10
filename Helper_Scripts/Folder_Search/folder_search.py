@@ -78,7 +78,7 @@ def get_all_folders(dedie_path, list_ofeileton, df1, out_path, mapping_anathesei
                                             continue  # No need to check further if folder already found                            
                             
                             
-                            elif  len(mapping_kodikoi) == 1:
+                            else:
                                 if mapping_kodikoi[name][0] in file :
                                     # print("             Found matching folder for:", name," with a single occurrence")
                                     mapping_folders[name] = root
@@ -91,9 +91,7 @@ def get_all_folders(dedie_path, list_ofeileton, df1, out_path, mapping_anathesei
                                             break
                                     continue  # No need to check further if folder already found
                                                         
-                            else :
-                                    # print("             No matching folder found for:", name, " with zero occurrences")
-                                    continue
+                            
     df1['Φάκελος'] = df1['Αντίδικος'].map(mapping_folders)
 
     return mapping_folders,mapping_files, mapping_kodikoi

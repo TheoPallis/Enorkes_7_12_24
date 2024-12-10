@@ -43,21 +43,13 @@ def main_function(excel_file_path,filtered_date=None,filtered_name_list=None,hea
     mapping_anatheseis,
     mapping_kodikoi,
     number_anathesis
-)
-    print("Mapping files:", mapping_files)
-    print("Mapping folders:", mapping_folders)
-    unnested_list = list(chain.from_iterable(list(mapping_folders.values())))
-    # Create the ΕΝΟΡΚΕΣ sheet    
-    # Create the ΑΝΑΦΟΡΑ sheet
+    )
+    print("Mapping folders : ", mapping_folders)
+    print("Mapping files : ",mapping_files)
     df2 = create_anafora_df(anathesi_df)
-
-
-
     file_list = create_file_list_based_on_list_ofeileton(list_ofeileton, mapping_files)
-
     # Extract text and create kliseis_df
     antidikos_1, antidikos_2, antidikos_3, last_date,sxetika1, sxetika2, sxetika3, sxetika4, sxetika5, sxetika6,sxetika7, sxetika8,sxetika9,sxetika10,sxetika11,sxetika12,sxetika13,sxetika14,sxetika15  = get_text_and_date(file_list, dedie_path)  #  sxetika9, sxetika10        
-    print("Names :",antidikos_1)
     # Create kliseis df
     #temp
     anathesi_df['hours'] = 0
@@ -69,7 +61,7 @@ def main_function(excel_file_path,filtered_date=None,filtered_name_list=None,hea
 
 def test_main_function() :
     test_excel_file_path = r"C:\Users\pallist\Desktop\Desktop\ΤΡΕΧΟΝΤΑ\Ένορκες\90 12_12.xlsx"
-    output_excel_file_path = r"C:\Users\pallist\Desktop\Desktop\ΤΡΕΧΟΝΤΑ\Ένορκες\90 12_12 testing.xlsx"
+    output_excel_file_path = r"C:\Users\pallist\Desktop\Desktop\ΤΡΕΧΟΝΤΑ\Testing Folder\Auto_enorkes_28_11_24 _sxetika_minimal\UATs\testing_file.xlsx"
     _,test_kliseis_df = main_function(test_excel_file_path)
     kliseis_df = pd.read_excel(output_excel_file_path,sheet_name='Κλήσεις')
     assert_frame_equal(kliseis_df, test_kliseis_df)
