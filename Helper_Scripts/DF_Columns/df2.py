@@ -1,5 +1,5 @@
 import pandas as pd
-from Helper_Scripts.Preprocessing.Formatting.formatting import format_date,remove_trailing_zero
+from Main_Scripts.formatting import format_date,remove_trailing_zero
 from Config.Config import log_execution
 @log_execution
 def create_anafora_df(anathesi_df):

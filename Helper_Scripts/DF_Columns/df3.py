@@ -1,5 +1,5 @@
 import pandas as pd
-from Helper_Scripts.Preprocessing.Formatting.formatting  import format_date
+from Main_Scripts.formatting  import format_date
 from Config.Config import log_execution
 # Change for_sxetika
 @log_execution

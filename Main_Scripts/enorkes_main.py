@@ -3,8 +3,7 @@ sys.path.append("..")
 import pandas as pd
 from itertools import chain
 from pandas.testing import assert_frame_equal
-from Helper_Scripts.Preprocessing.Mappings.Hours.assign_hours import assign_hours
-from Helper_Scripts.Preprocessing.Formatting.formatting import (
+from Main_Scripts.formatting import (
     get_number_anathesis,
     remove_trailing_zero,
     remove_invalid_dates_anatheseis_format_dates_fill_na,
@@ -14,6 +13,7 @@ from Helper_Scripts.Preprocessing.Formatting.formatting import (
     create_file_list_based_on_list_ofeileton)
 from Main_Scripts.folder_search import get_all_folders
 from Main_Scripts.Extact_Text import get_text_and_date
+from Main_Scripts.assign_hours import assign_hours
 from Helper_Scripts.Folder_Search.generate_search_mappings import generate_mappings_for_folder_search
 from Helper_Scripts.DF_Columns.df1 import create_path_df
 from Helper_Scripts.DF_Columns.df2 import create_anafora_df
@@ -25,10 +25,9 @@ def main_function(excel_file_path,filtered_date=None,filtered_name_list=None,hea
     anathesi_df = load_excel_file(excel_file_path)
     anathesi_df = remove_invalid_dates_anatheseis_format_dates_fill_na(anathesi_df)
     anathesi_df = filter_df(anathesi_df,filtered_date,filtered_name_list,head,anathesi)
-    print(len(anathesi_df))
     anathesi_df = fill_lawyers(anathesi_df,mapping_dikigoron_excel_file)
     anathesi_df = remove_trailing_zero(anathesi_df,['ΓΑΚ','ΕΑΚ'])
-    # anathesi_df = assign_hours(anathesi_df)
+    anathesi_df = assign_hours(anathesi_df)
     # Generate folder search mappings
     list_ofeileton,mapping_anatheseis,mapping_kodikoi = generate_mappings_for_folder_search(anathesi_df)
     number_anathesis = get_number_anathesis(anathesi_df)
@@ -52,7 +51,7 @@ def main_function(excel_file_path,filtered_date=None,filtered_name_list=None,hea
     antidikos_1, antidikos_2, antidikos_3, last_date,sxetika1, sxetika2, sxetika3, sxetika4, sxetika5, sxetika6,sxetika7, sxetika8,sxetika9,sxetika10,sxetika11,sxetika12,sxetika13,sxetika14,sxetika15  = get_text_and_date(file_list, dedie_path)  #  sxetika9, sxetika10        
     # Create kliseis df
     #temp
-    anathesi_df['hours'] = 0
+    # anathesi_df['hours'] = 0
     hours_col = anathesi_df['hours']
     df3 = create_kliseis_df(anathesi_df,antidikos_1,antidikos_2,antidikos_3,last_date,hours_col,'Ονοματεπώνυμο_Δικηγόρου','Ημερομηνία Προγραμματισμού  Ένορκης', sxetika1, sxetika2, sxetika3, sxetika4, sxetika5, sxetika6, sxetika7, sxetika8, sxetika9, sxetika10,sxetika11, sxetika12, sxetika13, sxetika14, sxetika15)
     create_excel_file(path_df,df2,df3)
@@ -60,8 +59,6 @@ def main_function(excel_file_path,filtered_date=None,filtered_name_list=None,hea
 
 
 from pandas.testing import assert_frame_equal
-
-
 def test_main_function() :
     test_excel_file_path = r"C:\Users\pallist\Desktop\Desktop\ΤΡΕΧΟΝΤΑ\Ένορκες\90 12_12.xlsx"
     output_excel_file_path = r"C:\Users\pallist\Desktop\Desktop\ΤΡΕΧΟΝΤΑ\Testing Folder\Auto_enorkes_28_11_24 _sxetika_minimal\UATs\testing_file.xlsx"

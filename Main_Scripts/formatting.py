@@ -85,8 +85,6 @@ def get_number_anathesis(df):
     print(f"Anatheseis : {sorted(list(number_anathesis))} Count of anathesis : {len(number_anathesis)}")
     return number_anathesis
 
-    
-
 
 def format_anathesis_phrase(number_anathesis) :
     number_anathesis = [("Υποθέσεις " + str(x) + "ης Ανάθεσης") for x in number_anathesis]

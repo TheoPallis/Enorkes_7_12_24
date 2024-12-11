@@ -1,5 +1,5 @@
 import pandas as pd
-# from Helper_Scripts.Folder_Search.get_modified_folder_name import get_folder_or_filename
+
 from Config.Config import log_execution
 @log_execution
 def create_path_df(anathesi_df) :
@@ -14,7 +14,6 @@ def create_path_df(anathesi_df) :
     })
     
     return df1
-
 
 def convert_to_hyperlink(df1):
     # Apply the function to the 'Φάκελος' column
