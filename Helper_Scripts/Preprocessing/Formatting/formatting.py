@@ -2,48 +2,59 @@ import re
 import pandas as pd
 from Config.Config import log_execution
 
-def load_excel_file(path):
-    return pd.read_excel(path,dtype=str)
+def remove_invalid_dates(df):
+    df = df[~df['Ημερομηνία Προγραμματισμού  Ένορκης'].str.contains(r'[α-ωΑ-Ω]', regex=True,na=False)]    
+    return df
 
-def remove_invalid_fill_na_convert_time(anathesi_df)  : 
-    anathesi_df = anathesi_df[~anathesi_df['Ημερομηνία Προγραμματισμού  Ένορκης'].str.contains(r'[α-ωΑ-Ω]', regex=True,na=False)]    
-    anathesi_df = anathesi_df.dropna(subset=['Ανάθεση'])
-    anathesi_df['Ημερομηνία Προγραμματισμού  Ένορκης'] = anathesi_df['Ημερομηνία Προγραμματισμού  Ένορκης'].fillna('1900-01-01 00:00')
-    anathesi_df['Ημερομηνία Προγραμματισμού  Ένορκης'] = pd.to_datetime(anathesi_df['Ημερομηνία Προγραμματισμού  Ένορκης'], format='ISO8601',dayfirst=True)
-    if 'Ημ νια Κατάθεσης Αγωγής ΝΚπολ Δ' in anathesi_df.columns :
-        anathesi_df['Ημ νια Κατάθεσης Αγωγής ΝΚπολ Δ'] = anathesi_df['Ημ νια Κατάθεσης Αγωγής ΝΚπολ Δ'].fillna('1900-01-01 00:00')
-        anathesi_df['Ημ νια Κατάθεσης Αγωγής ΝΚπολ Δ'] = pd.to_datetime(anathesi_df['Ημ νια Κατάθεσης Αγωγής ΝΚπολ Δ'], format='ISO8601',dayfirst=True)
+def remove_invalid_anatheseis(df) :
+    df = df.dropna(subset=['Ανάθεση'])
+    return df
 
-    # Convert the date column to datetime format
-    
-    anathesi_df = anathesi_df.fillna("")
-    return anathesi_df
+def format_date(df,col) :
+    if col in df.columns :
+        df[col] = df[col].fillna('1900-01-01 00:00:00')  # Use a default datetime string if NaN
+        df[col] = pd.to_datetime(df[col], errors='coerce')  # Parse without enforcing a format
+        df[col] = df[col].dt.strftime("%d/%m/%Y")  # Format into the desired date format  
+    return df
 
-def filter_df(anathesi_df,filtered_date,filtered_name_list,head) :
-    if filtered_date is not None and filtered_date != [] :
-        filtered_date2 = [pd.to_datetime(item, dayfirst=True) for item in filtered_date]
-        anathesi_df = anathesi_df[anathesi_df['Ημερομηνία Προγραμματισμού  Ένορκης'].isin(filtered_date2)]
-    if filtered_name_list is not None  and filtered_name_list != [] :
-        anathesi_df = anathesi_df[anathesi_df['Επωνυμία Αποδέκτη'].isin(filtered_name_list)]  
-    if head is not None :
-        anathesi_df = anathesi_df.head(head)
-    return anathesi_df
+def remove_invalid_dates_anatheseis_format_dates_fill_na(df)  : 
+    df = remove_invalid_dates(df)    
+    df = remove_invalid_anatheseis(df)
+    df = format_date(df,'Ημερομηνία Προγραμματισμού  Ένορκης')
+    df = format_date(df,'Ημ νια Κατάθεσης Αγωγής ΝΚπολ Δ')
+    df = df.fillna("")
+    return df
 
-def fill_lawyers(anathesi_df, mapping_dikigoron_excel_file):
-    mapping_df = pd.read_excel(mapping_dikigoron_excel_file, usecols=[0, 1, 2], dtype=str)
-    # Create mapping dictionaries once
-    lawyer_info_map = dict(zip(mapping_df.iloc[:, 0], mapping_df.iloc[:, 1]))
-    lawyer_name_map = dict(zip(mapping_df.iloc[:, 2], mapping_df.iloc[:, 0]))
-    # Apply mappings
-    anathesi_df['Στοιχεία_Δικηγόρου'] = anathesi_df['Υπογράφων Δικηγόρος Ένορκης'].map(lawyer_info_map).fillna('Unknown')
-    anathesi_df['Ονοματεπώνυμο_Δικηγόρου'] = anathesi_df['Υπογράφων Δικηγόρος Ένορκης'].map(lawyer_name_map).fillna('Unknown')
-    return anathesi_df
+def filter_df(df, filtered_date=None, filtered_name_list=None, head=None,anathesi = None):
+    if anathesi :
+        df = df[df['Ανάθεση'].str.contains(anathesi)]
+    if filtered_date:
+        df = df[df['Ημερομηνία Προγραμματισμού  Ένορκης'].isin(filtered_date)]
+    if filtered_name_list:
+        df = df[df['Επωνυμία Αποδέκτη'].isin(filtered_name_list)]
+    if head:
+        df = df.head(head)
+    return df
 
+def create_mapping_dict(df,col_index_1,col_index_2) :
+     return dict(zip(df.iloc[:, col_index_1], df.iloc[:, col_index_2]))
+     
+def fill_lawyers(df, mapping_dikigoron_excel_file):
+    # Load and prepare mapping dictionaries directly
+        mapping_df = pd.read_excel(mapping_dikigoron_excel_file, usecols=[0, 1, 2], dtype=str)
+        lawyer_info_map = create_mapping_dict(mapping_df,0,1)
+        lawyer_name_map = create_mapping_dict(mapping_df,0,2)    
+        # Apply mappings efficiently
+        df = df.assign(
+            Στοιχεία_Δικηγόρου=df['Υπογράφων Δικηγόρος Ένορκης'].map(lawyer_info_map).fillna('Unknown'),
+            Ονοματεπώνυμο_Δικηγόρου=df['Υπογράφων Δικηγόρος Ένορκης'].map(lawyer_name_map).fillna('Unknown')
+        )
+        return df
 
-def remove_trailing_zero(anathesi_df,cols):
-    for col in cols :
-        anathesi_df[col] = anathesi_df[col].apply(lambda x :str(x).replace(".0",""))
-    return anathesi_df
+def remove_trailing_zero(df,cols):
+    for col in cols:
+        df[col] = df[col].astype(str).str.rstrip('.0')
+    return df
 
 # Get date katathesis and create anafora_df
 
@@ -55,20 +66,18 @@ def get_date_katathesis(df) :
             return option
         # else :
             # print(f"Column date_katathesis not found")
+# def format_date_old(df, col):
+#     if df[col].isna().sum() < len(df):
+#         df[col] = df[col].fillna('1900-01-01')
+#         df[col] = df[col].apply(lambda row: pd.to_datetime(row).strftime("%d/%m/%Y"))
+#     else :
+#         df[col] = df[col].fillna('')
+#     return df[col] 
 
 
-def format_date(anathesi_df, col):
-    if anathesi_df[col].isna().sum() < len(anathesi_df):
-        anathesi_df[col] = anathesi_df[col].fillna('1900-01-01')
-        anathesi_df[col] = anathesi_df[col].apply(lambda row: pd.to_datetime(row).strftime("%d/%m/%Y"))
-    else :
-        anathesi_df[col] = anathesi_df[col].fillna('')
-    return anathesi_df[col] 
-
-
-def get_number_anathesis(anathesi_df):
+def get_number_anathesis(df):
     number_anathesis =  set()
-    for item in anathesi_df['Ανάθεση']:
+    for item in df['Ανάθεση']:
         if isinstance(item, str):  # Check if the item is a string
             match = re.search(r'\d+', item)
             if match:

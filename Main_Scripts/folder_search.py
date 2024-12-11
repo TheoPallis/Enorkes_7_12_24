@@ -52,7 +52,6 @@ def get_all_folders(dedie_path, list_ofeileton, df1, out_path, mapping_anathesei
                 if not match:
                     continue
                 number = match.group()[:-2]
-
                 for name in list_ofeileton:
                     # print("         Processing name:", name)
                     if mapping_anatheseis[name] != number:

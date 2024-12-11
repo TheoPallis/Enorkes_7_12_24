@@ -13,3 +13,4 @@ def format_df(file) :
             worksheet.column_dimensions[openpyxl.utils.get_column_letter(column[0].column)].width = 30      
     workbook.save(file)
 # format_df(file)
+

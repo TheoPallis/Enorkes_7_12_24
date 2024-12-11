@@ -9,11 +9,13 @@ def generate_mappings_for_folder_search(anathesi_df) :
     anathesi_list = list(anathesi_df['Ανάθεση'].apply(lambda x : str(x).split()[0].replace("η","").replace("ης","")))
     mapping_anatheseis = dict(zip(list_ofeileton,anathesi_list))    
     kodikos_list = list(anathesi_df['Κωδικός Ενέργειας'])
+    
     ordered_dict = {}
     for key, value in zip(list_ofeileton, kodikos_list):
         if key not in ordered_dict:
             ordered_dict[key] = []
         ordered_dict[key].append(value)
+    
     extra = set()
     for k,v in ordered_dict.items():
         if len(v) > 1:

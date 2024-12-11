@@ -39,7 +39,6 @@ def extract_sxetika(sxetika_found):
     for i in range(1, len(matches), 2):
         order = matches[i].strip()
         content = matches[i - 1].strip().replace(".", "")
-        print(i+1,": ",content)
         # Check if there are multiple references (e.g., "5 και 5α")
         if "και" in order:
         # Split the order by "και" and process each part separately

@@ -6,15 +6,14 @@ from Config.Config import log_execution
 def create_kliseis_df(df, antidikos_1, antidikos_2, antidikos_3, last_date, hours_col,
                       full_name_dikigorou, date_enorkis, sxetika1, sxetika2, sxetika3, sxetika4, sxetika5, sxetika6, sxetika7, sxetika8, sxetika9, sxetika10,sxetika11, sxetika12, sxetika13, sxetika14, sxetika15):
     
-    # print(f"Length of names : {len([x for x in range(1,len(df['Επωνυμία Αποδέκτη'])+1)])}")
-    # print(f"Length of full name dikigorou : {len(df[full_name_dikigorou])}")
-    # print(f"Antidikos 1 length : {len(antidikos_1)}")
-    # print(f"Antidikos 2 length : {len(antidikos_2)}")
-    # print(f"Antidikos 3 length : {len(antidikos_3)}")
-    # print(f"Last date length : {len(last_date)}")
-    # print(f"Length of date enorkis : {len(date_enorkis)}")
-    # print(f"Sxetika 1 length : {len(sxetika1)}")
-    # print(f"Hours length : {len(hours_col)}")
+    print(f"Length of full name dikigorou : {len(df[full_name_dikigorou])}")
+    print(f"Antidikos 1 length : {len(antidikos_1)}")
+    print(f"Antidikos 2 length : {len(antidikos_2)}")
+    print(f"Antidikos 3 length : {len(antidikos_3)}")
+    print(f"Last date length : {len(last_date)}")
+    print(f"Length of date enorkis : {len(date_enorkis)}")
+    print(f"Sxetika 1 length : {len(sxetika1)}")
+    print(f"Hours length : {len(hours_col)}")
     
     df = pd.DataFrame({
         'A/A': [x for x in range(1,len(df['Επωνυμία Αποδέκτη'])+1)],
@@ -38,14 +37,12 @@ def create_kliseis_df(df, antidikos_1, antidikos_2, antidikos_3, last_date, hour
         'Σχετικά14' : sxetika14,
         'Σχετικά15' : sxetika15,
         'Ημερομηνία_Αγωγής':  last_date,
-        'Ημερομηνία_Ένορκης' : format_date(df,date_enorkis),
+        'Ημερομηνία_Ένορκης' : df[date_enorkis],
         'Ώρα ένορκης': hours_col,
         'Δικηγόρος' : df[full_name_dikigorou] ,
         'Ημερομηνία Κλήσης' : '-',
         'Αίθουσα' : 'στον 2ο όροφο, Αίθουσα Λέοντος Σοφού' 
     })
-    # df3['Ημερομηνία_Ένορκης']= pd.to_datetime(anathesi_df['Ημερομηνία Προγραμματισμού  Ένορκης'], errors='coerce')
-    # df3['Ημερομηνία_Ένορκης'] = df3['Ημερομηνία_Ένορκης'].dt.strftime('%d/%m/%Y')
     df.replace(regex=True,inplace=True,to_replace="Ι.']",value="")
     return df
 

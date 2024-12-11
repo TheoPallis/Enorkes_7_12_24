@@ -5,6 +5,9 @@ from Helper_Scripts.Formtat_Excel_File.Format_Excel_File import format_df
 from Config.Config import log_execution
 
 
+def load_excel_file(path):
+    return pd.read_excel(path,dtype=str)
+
 def generate_timestamp_filename(filename_prefix,type):
     current_time = datetime.datetime.now()
     timestamp = current_time.strftime("%d-%m-%y_%H-%M")
@@ -25,4 +28,3 @@ def create_excel_file(df1,df2,df3):#,df4,df5,df6) :
         # df4.to_excel(writer, sheet_name='Συναρτήσεις', index=False)
         # df5.to_excel(writer, sheet_name='Checks', index=False)
         # df6.to_excel(writer, sheet_name='Checklist', index=False)
-
