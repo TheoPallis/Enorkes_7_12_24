@@ -1,3 +1,5 @@
+import os 
+import shutil
 import re
 import pandas as pd
 from Config.Config import log_execution
@@ -86,11 +88,23 @@ def get_number_anathesis(df):
     return number_anathesis
 
 
+def get_number_anathesis_from_folder(folder) :
+    match = re.search(r'\d+ης', folder)
+    if not match:
+        return None
+    number = match.group()[:-2]
+    return number
+
+
 def format_anathesis_phrase(number_anathesis) :
     number_anathesis = [("Υποθέσεις " + str(x) + "ης Ανάθεσης") for x in number_anathesis]
     return number_anathesis
 
 def create_file_list_based_on_list_ofeileton(list_ofeileton,mapping_files) :
     return [mapping_files.get(folder_name, "-") for folder_name in list_ofeileton]
-    
-    
+
+def handle_file_mapping(root, name, docx_file,mapping_files,count_full_name_occurrences,out_path):
+    full_path = os.path.join(root, docx_file)
+    mapping_files[name] = ''.join(mapping_files.get(name, '')) + full_path if count_full_name_occurrences > 1 else full_path
+    shutil.copy(full_path, out_path)
+    return True  # Stop further processing for this file

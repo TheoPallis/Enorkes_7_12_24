@@ -3,7 +3,7 @@ import shutil
 import re
 from Config.Config import log_execution
 from collections import defaultdict
-
+from formatting import get_number_anathesis_from_folder,handle_file_mapping
 def get_only_the_relevant_paths_for_arxeio_anathesis(number_anathesis, dedie_path):
     """Generate a list of paths matching the perimeter conditions."""
     print(f"Starting get_only_the_relevant_paths_for_arxeio_anathesis with number_anathesis: {number_anathesis} and dedie_path: {dedie_path}")
@@ -20,8 +20,9 @@ def get_only_the_relevant_paths_for_arxeio_anathesis(number_anathesis, dedie_pat
         if all(sub in path for sub in ["Υποθέσεις", "σης"]) and any(sub in path for sub in number_anathesis)
     ]
 
-def if_file_is_agogi(file, first_word_folder):
+def file_is_agogi(file, first_word_folder):
     """Filter files based on inclusion and exclusion conditions."""
+     
     include_conditions = [
         first_word_folder in file,
         "ΣΧΕΔΙΟ ΑΓΩΓΗΣ ΔΕΔΔΗΕ" in file,
@@ -31,9 +32,9 @@ def if_file_is_agogi(file, first_word_folder):
     exclude_conditions = ["ηρεξούσιο", "Προτάσεις", "Σχετικών", "ΒΕΒΑΙΗ", "οτάσεις", "ενορκη"]
     additional_valid_combinations = ["ΛΑΜΑΚΙΑ", "ΑΥΘΑΙΡΕΤΗ", "ΠΑΡΑΚΑΜΨΗ"]
 
-    if any(include_conditions) and all(term not in file for term in exclude_conditions):
+    if any(include_conditions) and all(term not in file for term in exclude_conditions) and file.endswith(".docx"):
         return True
-    if "ΑΓΩΓΗ" in file and any(comb in file for comb in additional_valid_combinations):
+    if "ΑΓΩΓΗ" in file and any(comb in file for comb in additional_valid_combinations) and file.endswith(".docx"):
         return True
     return False
 
@@ -50,51 +51,29 @@ def get_all_folders(dedie_path, list_ofeileton, df1, out_path, mapping_anathesei
 
             for root, _, files in os.walk(path):
                 print("     Processing root:", root)
-                match = re.search(r'\d+ης', root)
-                if not match:
+                number =  get_number_anathesis_from_folder(root)
+                if number == None :
                     continue
-                number = match.group()[:-2]
-
                 for name in list_ofeileton:
                     if mapping_anatheseis[name] != number:
                         continue
+                
                     first_word_folder = os.path.basename(root).split()[0]
-                    full_name  = name.split(' ')[:2]
-                    full_name = ' '.join(full_name)
+                    full_name = ' '.join(name.split(' ')[:2])
                     count_full_name_occurrences = (sum(len(re.findall(full_name, item)) for item in folder_names))
-                    
-                    if count_full_name_occurrences > 1:
-                            for file in files:
-                            # full_name  = name.split(' ')[:2]
-                            # full_name = ' '.join(full_name)
-                            # count_full_name_occurrences = (sum(len(re.findall(full_name, item)) for item in folder_names))
+                      
+                    for file in files:
+                        if any(kodikos in file for kodikos in mapping_kodikoi.get(name, [])):
+                            if count_full_name_occurrences > 1:
+                                mapping_folders[name] = ''.join(mapping_folders.get(name, '')) + root if root not in mapping_folders.get(name, '') else mapping_folders[name]
+                            else:
+                                mapping_folders[name] = root
 
-                                 for kodikos in mapping_kodikoi[name]:
-                                      if kodikos in file :
-                                            print("             Found matching folder for :", kodikos," for:", name," with mutliple occurrences")
-                                            mapping_folders[name] = ''.join(mapping_folders[name]) +  root if root not in mapping_folders[name] else mapping_folders[name]
-                                            for file in files:
-                                                if file.endswith(".docx") and if_file_is_agogi(file, first_word_folder):
-                                                    full_path = os.path.join(root, file)
-                                                    mapping_files[name] =   ''.join(mapping_files[name]) + full_path
-                                                    shutil.copy(full_path, out_path)
-                                                    break
-                                            continue  # No need to check further if folder already found                               
-                    else:
-                            for file in files:
-                                if mapping_kodikoi[name][0] in file :
-                                    # print("             Found matching folder for:", name," with a single occurrence")
-                                    mapping_folders[name] = root
-                                    for file in files:
-                                        if file.endswith(".docx") and if_file_is_agogi(file, first_word_folder):
-                                            full_path = os.path.join(root, file)
-                                            mapping_files[name] = full_path
-                                            print("             Found matching file for:", name, " at:", full_path)
-                                            shutil.copy(full_path, out_path)
-                                            break
-                                    continue  # No need to check further if folder already found
-                                                        
-                            
+                            for docx_file in (f for f in files if  file_is_agogi(f, first_word_folder)) :
+                                if handle_file_mapping(root, name, docx_file,mapping_files,count_full_name_occurrences,out_path):
+                                    break
+                            break
+         
     df1['Φάκελος'] = df1['Αντίδικος'].map(mapping_folders)
 
     return mapping_folders,mapping_files, mapping_kodikoi

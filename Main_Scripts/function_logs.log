@@ -7089,3 +7089,33 @@
 2024-12-12 11:34:53,958 -  Function 'get_text_and_date' in file 'Extact_Text.py' executed successfully in 50.0298 seconds.
 2024-12-12 11:34:53,958 - Starting execution of function 'create_kliseis_df' in file 'df3.py' at 12/12/2024 11:34 with arguments: df, antidikos_1, antidikos_2, antidikos_3, last_date, hours_col, full_name_dikigorou, date_enorkis, sxetika1, sxetika2, sxetika3, sxetika4, sxetika5, sxetika6, sxetika7, sxetika8, sxetika9, sxetika10, sxetika11, sxetika12, sxetika13, sxetika14, sxetika15
 2024-12-12 11:34:53,961 -  Function 'create_kliseis_df' in file 'df3.py' executed successfully in 0.0030 seconds.
+2024-12-12 11:35:24,000 - Starting execution of function 'create_path_df' in file 'df1.py' at 12/12/2024 11:35 with arguments: anathesi_df
+2024-12-12 11:35:24,001 -  Function 'create_path_df' in file 'df1.py' executed successfully in 0.0000 seconds.
+2024-12-12 11:40:38,275 - Starting execution of function 'create_path_df' in file 'df1.py' at 12/12/2024 11:40 with arguments: anathesi_df
+2024-12-12 11:40:38,276 -  Function 'create_path_df' in file 'df1.py' executed successfully in 0.0010 seconds.
+2024-12-12 11:40:45,562 - Starting execution of function 'create_path_df' in file 'df1.py' at 12/12/2024 11:40 with arguments: anathesi_df
+2024-12-12 11:40:45,565 -  Function 'create_path_df' in file 'df1.py' executed successfully in 0.0020 seconds.
+2024-12-12 11:50:16,450 - Starting execution of function 'create_path_df' in file 'df1.py' at 12/12/2024 11:50 with arguments: anathesi_df
+2024-12-12 11:50:16,451 -  Function 'create_path_df' in file 'df1.py' executed successfully in 0.0010 seconds.
+2024-12-12 11:56:24,649 - Starting execution of function 'create_path_df' in file 'df1.py' at 12/12/2024 11:56 with arguments: anathesi_df
+2024-12-12 11:56:24,649 -  Function 'create_path_df' in file 'df1.py' executed successfully in 0.0000 seconds.
+2024-12-12 11:57:34,904 - Starting execution of function 'create_path_df' in file 'df1.py' at 12/12/2024 11:57 with arguments: anathesi_df
+2024-12-12 11:57:34,905 -  Function 'create_path_df' in file 'df1.py' executed successfully in 0.0000 seconds.
+2024-12-12 11:58:13,982 - Starting execution of function 'create_path_df' in file 'df1.py' at 12/12/2024 11:58 with arguments: anathesi_df
+2024-12-12 11:58:13,983 -  Function 'create_path_df' in file 'df1.py' executed successfully in 0.0016 seconds.
+2024-12-12 11:58:23,788 - Starting execution of function 'create_path_df' in file 'df1.py' at 12/12/2024 11:58 with arguments: anathesi_df
+2024-12-12 11:58:23,788 -  Function 'create_path_df' in file 'df1.py' executed successfully in 0.0000 seconds.
+2024-12-12 12:13:17,096 - Starting execution of function 'create_anafora_df' in file 'df2.py' at 12/12/2024 12:13 with arguments: anathesi_df
+2024-12-12 12:13:17,096 -  Function 'create_anafora_df' in file 'df2.py' executed successfully in 0.0000 seconds.
+2024-12-12 12:13:17,097 - Starting execution of function 'get_text_and_date' in file 'Extact_Text.py' at 12/12/2024 12:13 with arguments: file_list, path_to_search_enorkes
+2024-12-12 12:14:56,674 -  Function 'get_text_and_date' in file 'Extact_Text.py' executed successfully in 99.5772 seconds.
+2024-12-12 12:14:56,675 - Starting execution of function 'create_kliseis_df' in file 'df3.py' at 12/12/2024 12:14 with arguments: df, antidikos_1, antidikos_2, antidikos_3, last_date, hours_col, full_name_dikigorou, date_enorkis, sxetika1, sxetika2, sxetika3, sxetika4, sxetika5, sxetika6, sxetika7, sxetika8, sxetika9, sxetika10, sxetika11, sxetika12, sxetika13, sxetika14, sxetika15
+2024-12-12 12:14:56,678 -  Function 'create_kliseis_df' in file 'df3.py' executed successfully in 0.0030 seconds.
+2024-12-12 12:27:46,329 - Starting execution of function 'create_path_df' in file 'df1.py' at 12/12/2024 12:27 with arguments: anathesi_df
+2024-12-12 12:27:46,330 -  Function 'create_path_df' in file 'df1.py' executed successfully in 0.0010 seconds.
+2024-12-12 12:45:22,012 - Starting execution of function 'create_anafora_df' in file 'df2.py' at 12/12/2024 12:45 with arguments: anathesi_df
+2024-12-12 12:45:22,013 -  Function 'create_anafora_df' in file 'df2.py' executed successfully in 0.0000 seconds.
+2024-12-12 12:45:22,013 - Starting execution of function 'get_text_and_date' in file 'Extact_Text.py' at 12/12/2024 12:45 with arguments: file_list, path_to_search_enorkes
+2024-12-12 12:46:33,090 -  Function 'get_text_and_date' in file 'Extact_Text.py' executed successfully in 71.0772 seconds.
+2024-12-12 12:46:33,091 - Starting execution of function 'create_kliseis_df' in file 'df3.py' at 12/12/2024 12:46 with arguments: df, antidikos_1, antidikos_2, antidikos_3, last_date, hours_col, full_name_dikigorou, date_enorkis, sxetika1, sxetika2, sxetika3, sxetika4, sxetika5, sxetika6, sxetika7, sxetika8, sxetika9, sxetika10, sxetika11, sxetika12, sxetika13, sxetika14, sxetika15
+2024-12-12 12:46:33,094 -  Function 'create_kliseis_df' in file 'df3.py' executed successfully in 0.0030 seconds.
