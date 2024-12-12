@@ -53,7 +53,7 @@ def fill_lawyers(df, mapping_dikigoron_excel_file):
 
 def remove_trailing_zero(df,cols):
     for col in cols:
-        df[col] = df[col].astype(str).str.rstrip('.0')
+        df[col] = df[col].astype(str)#.str.rstrip('.0')
     return df
 
 # Get date katathesis and create anafora_df
