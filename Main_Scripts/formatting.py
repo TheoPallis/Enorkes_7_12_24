@@ -30,10 +30,12 @@ def remove_invalid_dates_anatheseis_format_dates_fill_na(df)  :
     return df
 
 def filter_df(df, filtered_date=None, filtered_name_list=None, head=None,anathesi = None):
+
     if anathesi :
-        df = df[df['Ανάθεση'].str.contains(anathesi)]
+        df = df[df['Ανάθεση'].str.contains(str(anathesi))]
     if filtered_date:
         df = df[df['Ημερομηνία Προγραμματισμού  Ένορκης'].isin(filtered_date)]
+        print(f"The df is {len(df)} rows")
     if filtered_name_list:
         df = df[df['Επωνυμία Αποδέκτη'].isin(filtered_name_list)]
     if head:

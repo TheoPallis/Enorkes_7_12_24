@@ -1,3 +1,4 @@
+import pickle
 import sys
 sys.path.append("..") 
 import pandas as pd
@@ -33,7 +34,6 @@ def main_function(excel_file_path,filtered_date=None,filtered_name_list=None,hea
     number_anathesis = get_number_anathesis(anathesi_df)
     number_anathesis = format_anathesis_phrase(number_anathesis)
     path_df = create_path_df(anathesi_df)
-        
     mapping_folders, mapping_files, mapping_kodikoi= get_all_folders(
     dedie_path,
     list_ofeileton,
@@ -47,6 +47,7 @@ def main_function(excel_file_path,filtered_date=None,filtered_name_list=None,hea
     print("Mapping files : ",mapping_files)
     df2 = create_anafora_df(anathesi_df)
     file_list = create_file_list_based_on_list_ofeileton(list_ofeileton, mapping_files,dedie_path)
+    print(file_list)
     # Extract text and create kliseis_df
     antidikos_1, antidikos_2, antidikos_3, last_date,sxetika1, sxetika2, sxetika3, sxetika4, sxetika5, sxetika6,sxetika7, sxetika8,sxetika9,sxetika10,sxetika11,sxetika12,sxetika13,sxetika14,sxetika15  = get_text_and_date(file_list)  #  sxetika9, sxetika10        
     # Create kliseis df

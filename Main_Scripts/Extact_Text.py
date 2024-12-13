@@ -3,7 +3,7 @@ import re
 import pandas as pd
 import os
 from Config.Config import log_execution
-
+#[Α|α|Β|β|Γ|γ|Δ|δ]
 def append_empty(antidikos_1, antidikos_2, antidikos_3, last_date,  sxetika1, sxetika2, sxetika3, sxetika4, sxetika5, sxetika6, sxetika7, sxetika8,sxetika9, sxetika10, sxetika11, sxetika12, sxetika13, sxetika14, sxetika15):
     sxetika_lists = [ sxetika1, sxetika2, sxetika3, sxetika4, sxetika5, sxetika6, sxetika7, sxetika8,sxetika9, sxetika10, sxetika11, sxetika12, sxetika13, sxetika14, sxetika15]
     antidikos_1.append("No document found")
@@ -31,19 +31,28 @@ def extract_sxetika(sxetika_found):
         return None
 
     # Adjusted regex to split on all occurrences of "(Σχετικό X)" with optional spaces or additional characters
-    matches = re.split(r'\(Σχετικ[όά] (\d+[α]?(?:\s*και\s*\d+[α]?)?)\)', sxetika_found[0])
+    # matches = re.split(r'\(Σχετικ[όά] (\d+(?:[Α-ωΑ-Ωα]*)?(?:,\s*\d+(?:[Α-ωΑ-Ωα]*)?)*(?:\s*και\s*\d+(?:[Α-ωΑ-Ωα]*)?)?)\)', sxetika_found[0])
+    pattern = r'\(Σχετικ[όά]\s+(\d+(?:[α-ωΑ-Ω]*)?(?:,\s*\d+(?:[α-ωΑ-Ω]*)?)*(?:\s*και\s*\d+(?:[α-ωΑ-Ω]*)?)?(?:\s*αντίστοιχα)?)\)'
+
+    matches = re.split(pattern,sxetika_found[0])
+
+
     formatted_list = []
 
     # Iterate through the matches to generate the final formatted output
     for i in range(1, len(matches), 2):
         order = matches[i].strip()
         content = matches[i - 1].strip().replace(".", "")
-        print(f"Έγγραφο {order} : {content} (Σχετικό {order})")
+        # print(f"Έγγραφο {order} : {content} (Σχετικό {order})")
         # Check if there are multiple references (e.g., "5 και 5α")
         if "και" in order:
         # Split the order by "και" and process each part separately
             refs = [ref.strip() for ref in order.split("και")]
             contents = content.split("και")
+        if "," in order:
+            refs = [ref.strip() for ref in order.split(",")]
+            contents = content.split(",")
+            print(refs,contents)
             for ref, content in zip(refs, contents):   
                 if len(formatted_item) < 250 :
                     formatted_item = f"Έγγραφο {ref} : {content} (Σχετικό {ref})"  
@@ -76,8 +85,6 @@ def extract_sxetika(sxetika_found):
 # Change_for_sxetika
 @log_execution
 def get_text_and_date(file_list):
-    # Initialize lists to store extracted data
-    final_lists = [[] for _ in range(15)]
     antidikos_1, antidikos_2, antidikos_3, last_date,sxetika_list = [], [], [], [],[]
     sxetika1, sxetika2, sxetika3, sxetika4, sxetika5, sxetika6, sxetika7, sxetika8, sxetika9, sxetika10,sxetika11,sxetika12,sxetika13,sxetika14,sxetika15 = [], [], [], [], [], [], [], [], [], [], [], [], [], [], []
     pattern = r'\b(\d{1,2}[-/\.]\d{1,2}[-/\.]\d{2,4})\b\s+(Ο Πληρεξούσιος Δικηγόρος|Η Πληρεξούσια Δικηγόρος|Η Πληρεξούσιος( της «ΔΕΔΔΗΕ Α\.Ε»)? Δικηγόρος)'
@@ -87,6 +94,7 @@ def get_text_and_date(file_list):
     sxetika_lists = [sxetika1, sxetika2, sxetika3, sxetika4, sxetika5, sxetika6, sxetika7, sxetika8, sxetika9, sxetika10,sxetika11,sxetika12,sxetika13,sxetika14,sxetika15]
 
     for file in file_list:
+        try:
             # Step 1: Open and read the document
             try:
                 doc = Document(file)
@@ -151,5 +159,7 @@ def get_text_and_date(file_list):
             except Exception as e:
                 for sxetika in sxetika_lists:
                     sxetika.append(f"Error extracting sxetika: {e}")
-                    
+        except Exception as main_exception:
+            append_empty(antidikos_1, antidikos_2, antidikos_3, last_date, sxetika1, sxetika2, sxetika3, sxetika4, sxetika5, sxetika6, sxetika7, sxetika8, sxetika9, sxetika10, sxetika11, sxetika12, sxetika13, sxetika14, sxetika15)
+       
     return antidikos_1,antidikos_2, antidikos_3, last_date, sxetika1, sxetika2, sxetika3, sxetika4, sxetika5, sxetika6, sxetika7, sxetika8,sxetika9, sxetika10, sxetika11, sxetika12, sxetika13, sxetika14, sxetika15
