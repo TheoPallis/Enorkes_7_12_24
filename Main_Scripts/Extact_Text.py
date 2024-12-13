@@ -2,7 +2,6 @@ from docx import Document
 import re
 import pandas as pd
 import os
-from docx.opc.exceptions import PackageNotFoundError
 from Config.Config import log_execution
 
 def append_empty(antidikos_1, antidikos_2, antidikos_3, last_date,  sxetika1, sxetika2, sxetika3, sxetika4, sxetika5, sxetika6, sxetika7, sxetika8,sxetika9, sxetika10, sxetika11, sxetika12, sxetika13, sxetika14, sxetika15):
@@ -24,7 +23,7 @@ def append_empty(antidikos_1, antidikos_2, antidikos_3, last_date,  sxetika1, sx
         #     if index < len(default):  # Assign corresponding default if within range
         #         sxetika.append(default[index])
         #     else:  # Append "No document found" if no corresponding default
-         sxetika.append("κενο")
+         sxetika.append("No document found")
     return sxetika1, sxetika2, sxetika3, sxetika4, sxetika5, sxetika6, sxetika7, sxetika8,sxetika9, sxetika10, sxetika11, sxetika12, sxetika13, sxetika14, sxetika15
 
 def extract_sxetika(sxetika_found):
@@ -39,6 +38,7 @@ def extract_sxetika(sxetika_found):
     for i in range(1, len(matches), 2):
         order = matches[i].strip()
         content = matches[i - 1].strip().replace(".", "")
+        print(f"Έγγραφο {order} : {content} (Σχετικό {order})")
         # Check if there are multiple references (e.g., "5 και 5α")
         if "και" in order:
         # Split the order by "και" and process each part separately
@@ -63,7 +63,7 @@ def extract_sxetika(sxetika_found):
                     formatted_list.append(formatted_item)
                 elif len(content) >= 250:
                     formatted_item = f"Έγγραφο {order} : {content}"
-                    formatted_item = formatted_item[:200] + f" !!Αδύνατη η αναγραφή λόγω μεγάλου μήκους" 
+                    # formatted_item = formatted_item[:200] + f" !!Αδύνατη η αναγραφή λόγω μεγάλου μήκους" 
                     formatted_list.append(formatted_item)
 
     # Join the formatted items into a single string with line breaks
@@ -75,7 +75,7 @@ def extract_sxetika(sxetika_found):
 
 # Change_for_sxetika
 @log_execution
-def get_text_and_date(file_list, path_to_search_enorkes):
+def get_text_and_date(file_list):
     # Initialize lists to store extracted data
     final_lists = [[] for _ in range(15)]
     antidikos_1, antidikos_2, antidikos_3, last_date,sxetika_list = [], [], [], [],[]
@@ -87,15 +87,11 @@ def get_text_and_date(file_list, path_to_search_enorkes):
     sxetika_lists = [sxetika1, sxetika2, sxetika3, sxetika4, sxetika5, sxetika6, sxetika7, sxetika8, sxetika9, sxetika10,sxetika11,sxetika12,sxetika13,sxetika14,sxetika15]
 
     for file in file_list:
-        try:
-            # print(file)
-            doc_path = os.path.join(path_to_search_enorkes, file)
             # Step 1: Open and read the document
             try:
-                doc = Document(doc_path)
+                doc = Document(file)
                 paragraphs = ''.join(p.text for p in doc.paragraphs)
             except Exception as e:
-                # print(f"Exception1 opening document {file}: {e}")
                 raise  # Re-raises the exception to skip to the outer except block
 
             # Step 2: Extract dates
@@ -103,7 +99,6 @@ def get_text_and_date(file_list, path_to_search_enorkes):
                 found_dates = re.findall(pattern, paragraphs)
                 last_found_date = found_dates[-1][0] if found_dates else "-"
             except Exception as e:
-                # print(f"Error extracting dates for {file}: {e}")
                 last_found_date = "Error extracting dates"
 
             # Step 5: Append the last date found
@@ -117,7 +112,6 @@ def get_text_and_date(file_list, path_to_search_enorkes):
                 name_str = name_str.replace('καιΤου','Του')
                 name_str = name_str.replace('καιΤης','Της')
             except Exception as e:
-                # print(f"Error extracting names for {file}: {e}")
                 name_str = "---"
 
             # Step 4: Extract antidikos information
@@ -147,20 +141,15 @@ def get_text_and_date(file_list, path_to_search_enorkes):
             # Step 6: Extract "sxetika" information
             try:
                 sxetika_found = re.findall(sxetika_pattern, paragraphs)
-                
+                # sxetika_found = [sxetiko.replace(' αντίστοιχα).',")") for sxetiko in sxetika_found]                 
                 sxetika_list = extract_sxetika(sxetika_found).split("\n")
                 for i, sxetika in enumerate(sxetika_lists):
                     try:
                         sxetika.append(sxetika_list[i])
                     except IndexError:
                         sxetika.append("")
-                        # sxetika.append("Did not find sxetika")
             except Exception as e:
                 for sxetika in sxetika_lists:
                     sxetika.append(f"Error extracting sxetika: {e}")
-                    # sxetika.append("Error extracting sxetika")
-        except Exception as main_exception:
-            # print(f"Exception2 processing file {file}: {main_exception}")
-            append_empty(antidikos_1, antidikos_2, antidikos_3, last_date, sxetika1, sxetika2, sxetika3, sxetika4, sxetika5, sxetika6, sxetika7, sxetika8, sxetika9, sxetika10, sxetika11, sxetika12, sxetika13, sxetika14, sxetika15)
-       
+                    
     return antidikos_1,antidikos_2, antidikos_3, last_date, sxetika1, sxetika2, sxetika3, sxetika4, sxetika5, sxetika6, sxetika7, sxetika8,sxetika9, sxetika10, sxetika11, sxetika12, sxetika13, sxetika14, sxetika15

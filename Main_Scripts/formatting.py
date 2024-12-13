@@ -4,6 +4,8 @@ import re
 import pandas as pd
 from Config.Config import log_execution
 
+
+
 def remove_invalid_dates(df):
     df = df[~df['Ημερομηνία Προγραμματισμού  Ένορκης'].str.contains(r'[α-ωΑ-Ω]', regex=True,na=False)]    
     return df
@@ -100,8 +102,8 @@ def format_anathesis_phrase(number_anathesis) :
     number_anathesis = [("Υποθέσεις " + str(x) + "ης Ανάθεσης") for x in number_anathesis]
     return number_anathesis
 
-def create_file_list_based_on_list_ofeileton(list_ofeileton,mapping_files) :
-    return [mapping_files.get(folder_name, "-") for folder_name in list_ofeileton]
+def create_file_list_based_on_list_ofeileton(list_ofeileton,mapping_files,path_to_search_enorkes) :
+    return [os.path.join(path_to_search_enorkes,mapping_files.get(folder_name, "-")) for folder_name in list_ofeileton]
 
 def handle_file_mapping(root, name, docx_file,mapping_files,count_full_name_occurrences,out_path):
     full_path = os.path.join(root, docx_file)
